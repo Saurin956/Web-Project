@@ -9,13 +9,13 @@
 
 
 body {
-    background:linear-gradient(135deg,rgba(21, 11, 70, 0.5), rgba(194, 145, 29, 0.5) );
+    background:linear-gradient(135deg,rgba(235, 60, 39, 0.5), rgba(235, 60, 39, 0.5) );
     display: flex;
     min-height: 100vh; 
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-image: linear-gradient(135deg,rgb(70, 130, 180,0.5), rgb(211, 110, 32,0.5)) ,url('loginpage.jpg');
+    background-image: /*linear-gradient(135deg,rgb(70, 130, 180,0.5), rgb(211, 110, 32,0.5))*//*linear-gradient(135deg,rgba(235, 60, 39, 0.9), rgba(235, 60, 39, 0.9) ) linear-gradient(135deg,rgba(255, 112, 97, 0.9), rgb(255, 112, 97, 0.9)),*/url('loginpage.jpg');
     background-position: center;
     background-attachment: fixed;
     background-size:100%;
@@ -139,4 +139,12 @@ h2 {
 
 .register-link a:hover {
     text-decoration: underline;
+}
+
+.error-messages {
+    color: red;
+    margin-bottom: 15px;
+    font-size: 14px;
+    text-align: left;
+    /*display: block;*/
 }

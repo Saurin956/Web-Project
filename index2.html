@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <script>
+        async function fetchMenu() {
+            const response = await fetch('http://localhost:5000/menu');
+            const menu = await response.json();
+            const menuList = document.getElementById('menu');
+
+            menuList.innerHTML = '';
+
+            menu.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    ${item.name} - INR ${item.price.toFixed(2)}
+                    <button onclick="updateCount('${item._id}', ${item.count - 1})" ${item.count <= 0 ? 'disabled' : ''}>-</button>
+                    ${item.count}
+                    <button onclick="updateCount('${item._id}', ${item.count + 1})">+</button>
+                `;
+                menuList.appendChild(li);
+            });
+        }
+
+        async function updateCount(id, count) {
+            await fetch(`http://localhost:5000/menu/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ count })
+            });
+            fetchMenu(); // Refresh menu after update
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchMenu);
+    </script>
+</head>
+<body>
+    <h1>Menu</h1>
+    <ul id="menu"></ul>
+</body>
+</html>

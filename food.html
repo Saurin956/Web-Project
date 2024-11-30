@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IIIT Naya Raipur Eatery</title>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="css/JKS-icons.css">
+<link rel="stylesheet" type="text/css" href="css/settings.css">
+<link rel="stylesheet" type="text/css" href="css/owl.carousel.css">
+<link rel="stylesheet" type="text/css" href="css/owl.transitions.css">
+<link rel="stylesheet" type="text/css" href="css/jquery.fancybox.css">
+<link rel="stylesheet" type="text/css" href="css/zerogrid.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<link rel="stylesheet" type="text/css" href="css/loader.css">
+<link rel="shortcut icon" href="images/favicon.png">
+
+
+
+</head>
+
+<body>
+
+<!--Loader-->
+<div class="loader"> 
+   <div class="cssload-container">
+     <div class="cssload-circle"></div>
+     <div class="cssload-circle"></div>
+   </div>
+</div>
+
+<!--Top bar-->
+
+
+<!--Topbar-->
+<div class="topbar">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <p class="pull-left hidden-xs">IIIT Naya Raipur Eatery</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Header-->
+<header id="main-navigation">
+  <div id="navigation" data-spy="affix" data-offset-top="20">
+    <div class="container">
+      <div class="row">
+      <div class="col-md-12">
+        <nav class="navbar navbar-default">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#fixed-collapse-navbar" aria-expanded="false"> 
+            <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> 
+            </button>
+           <a class="navbar-brand" href="index.html"><img src="InstituteLogo.png" alt="logo" class="img-responsive" height="100px" width="100px"></a> 
+         </div>
+        
+            <div id="fixed-collapse-navbar" class="navbar-collapse collapse navbar-right">
+              <ul class="nav navbar-nav">
+                <li>
+                  <a href="login.html">Login</a>
+                </li>
+                <li>
+                   <a href="index.html">Home</a>
+                   
+                </li>
+                <li><a href="food.html">Our Food</a></li>
+            
+                
+              </ul>
+            </div>
+         </nav>
+         </div>
+       </div>
+     </div>
+  </div>
+</header>
+
+<!--Page header & Title-->
+<section id="page_header">
+<div class="page_title">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+         <h2 class="title">Our Food</h2>
+         <p>Check out our menu and some of our special, featured recipies!</p>
+      </div>
+    </div>
+  </div>
+</div>  
+</section>
+
+
+<!--Food Facilities-->
+<section id="food" class="padding bg_grey">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h2 class="heading">Our &nbsp; Menu</h2>
+        <hr class="heading_space">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <ul id="menu-widget" class="menu_widget">
+          <li>Samosa<span>INR 30.00</span></li>
+          <li>Pizza<span>INR 99.00</span></li>
+          <li>Cheese Sandwich<span>INR 60.00</span></li>
+          <li>Paneer Sandwich<span>INR 80.00</span></li>
+          <li>Fried Rice<span>INR 60.00</span></li>
+          <li>Coffee<span>INR 9.00</span></li>
+          <li>Maggi Noodles Regular<span>INR 30.00</span></li>
+          <li>Veg Burger<span>INR 40.00</span></li> 
+          <li>Normal Thali<span>INR 45.00</span></li>
+          <li>Special Thali<span>INR 63.00</span></li>
+          <li>Paneer Chilli <span>INR 80.00</span></li>
+          <li>Masala Dosa<span>INR 36.00</span></li>
+           </ul>
+      </div>
+      
+      <script >
+        document.addEventListener("DOMContentLoaded", () => {
+          fetch("http://localhost:5501/menu")
+            .then((response) => response.json())
+            .then((data) => {
+              const menuList = document.getElementById("menu");
+              menuList.innerHTML = data
+                .map(
+                  (item) =>
+                    `<li>${item.name}<span>INR ${item.price.toFixed(2)}</span></li>`
+                )
+                .join("");
+            })
+            .catch((error) => console.error("Error fetching menu:", error));
+        });
+      </script>
+
+
+<script>
+  async function fetchMenu() {
+      const response = await fetch('http://localhost:5000/menu');
+      const menu = await response.json();
+      const menuList = document.getElementById('menu');
+
+      menuList.innerHTML = '';
+
+      menu.forEach(item => {
+          const li = document.createElement('li');
+          li.innerHTML = `
+              ${item.name} - INR ${item.price.toFixed(2)}
+              <button onclick="updateCount('${item._id}', ${item.count - 1})" ${item.count <= 0 ? 'disabled' : ''}>-</button>
+              ${item.count}
+              <button onclick="updateCount('${item._id}', ${item.count + 1})">+</button>
+          `;
+          menuList.appendChild(li);
+      });
+  }
+
+  async function updateCount(id, count) {
+      await fetch(`http://localhost:5000/menu/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ count })
+      });
+      fetchMenu(); // Refresh menu after update
+  }
+
+  document.addEventListener('DOMContentLoaded', fetchMenu);
+</script>
+
+<h1>Menu</h1>
+<ul id="menu"></ul>
+      
+      
+      <div class="col-md-8 grid_layout">
+      <div class="row">
+      <div class="zerogrid">
+          <div class="wrap-container">
+            <div class="wrap-content clearfix">
+              <div class="col-1-2">
+              <div class="wrap-col first">
+                  <div class="item-container"> 
+                   <img src="images/Samosa.jpg" alt="cook" >
+                   <div class="overlay">
+                       <a class="overlay-inner fancybox" href="images/Samosa.jpg" data-fancybox-group="gallery">
+                           Samosa
+                       </a> 
+                   </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-1-2">
+              <div class="wrap-col first">
+                  <div class="item-container"> 
+                   <img src="images/pizza.jpg" alt="cook"  /> 
+                   <div class="overlay">
+                      <a class="overlay-inner fancybox" href="images/pizza.jpg" data-fancybox-group="gallery">
+                         Pizza
+                      </a>
+                   </div>
+                   </div>
+                </div>
+              </div>
+              <div class="col-1-2">
+              <div class="wrap-col">
+                  <div class="item-container"> 
+                   <img src="images/friedrice.jpg" alt="cook"/> 
+                   <div class="overlay">
+                       <a class="overlay-inner fancybox" href="images/friedrice.jpg" data-fancybox-group="gallery">
+                          Fried Rice
+                       </a>
+                   </div>
+                    </div>
+                </div>
+              </div>
+              <div class="col-1-2">
+              <div class="wrap-col">
+                  <div class="item-container"> 
+                   <img src="images/grid-layout2.jpg" alt="cook"/> 
+                   <div class="overlay">
+                       <a class="fancybox overlay-inner" href="images/grid-layout5.jpg" data-fancybox-group="gallery"> 
+                         Burger
+                       </a>
+                    </div>
+                   </div>
+                 </div>
+               </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--Featured Receipes -->
+<section id="news" class="bg_grey padding">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 text-center">
+      <h2 class="heading">Featured &nbsp; Food &nbsp; Receipes</h2>
+      <hr class="heading_space">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="cheffs_wrap_slider">
+          <div id="news-slider" class="owl-carousel">
+            <div class="item">
+              <div class="news_content">
+               <img src="images/fries.jpg" alt="Docotor">
+               <div class="date_comment">
+                  <span>1<small>dec</small></span>
+                  <a href="#."><i class="icon-comment"></i> 5</a>
+               </div>
+               <div class="comment_text">
+                 <h3><a href="#.">Fries</a></h3>
+                 <p>Enjoy Delicious Food!</p>
+               </div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="news_content">
+               <img src="images/pizza.jpg" alt="Docotor">
+               <div class="date_comment">
+                  <span>1<small>dec</small></span>
+                  <a href="#."><i class="icon-comment"></i> 5</a>
+               </div>
+               <div class="comment_text">
+                 <h3><a href="#.">Pizza</a></h3>
+                 <p>Enjoy Delicious Food!</p>
+               </div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="news_content">
+               <img src="images/dosa.jpg" alt="Docotor">
+               <div class="date_comment">
+                  <span>1<small>dec</small></span>
+                  <a href="#."><i class="icon-comment"></i> 5</a>
+               </div>
+               <div class="comment_text">
+                 <h3><a href="#.">Dosa</a></h3>
+                 <p>Enjoy Delicious Food!</p>
+               </div>
+              </div>
+            </div>
+            
+            <div class="item">
+              <div class="news_content">
+               <img src="images/grid-layout2.jpg" alt="Docotor">
+               <div class="date_comment">
+                  <span>1<small>dec</small></span>
+                   <a href="#."><i class="icon-comment"></i> 5</a>
+               </div>
+               <div class="comment_text">
+                 <h3><a href="#.">Burger</a></h3>
+                 <p>Enjoy Delicious Food!</p>
+               </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- testinomial 
+<section id="testinomial" class="padding">
+  <div class="container">
+  <div class="row">
+      <div class="col-md-12 text-center">
+      <h2 class="heading">Our &nbsp; happy &nbsp; Customers</h2>
+      <hr class="heading_space">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+      <div id="testinomial-slider" class="owl-carousel text-center">
+        <div class="item">
+          <h3>Awesome Food. Food from some of the finest restaurants in India!</h3>
+          <p>Chris Martin</p>
+        </div>
+        <div class="item">
+          <h3>Good Recipes, Nice staff and customer care. A good service overall</h3>
+          <p>Alex Hales</p>
+        </div>
+        <div class="item">
+          <h3>Awesome Food. Food from some of the finest restaurants in India!</h3>
+          <p>Shane Robertson</p>
+        </div>
+       </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+<!--Footer-->
+<footer class="padding-top bg_black">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3 col-sm-6 footer_column">
+        <h4 class="heading">Quick Links</h4>
+        <hr class="half_space">
+        <ul class="widget_links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="food.html">Our Food</a></li>
+          
+          <li><a href="./account/register.php">Order Now</a></li>
+          
+        </ul>
+      </div>
+      <div class="col-md-3 col-sm-6 footer_column">
+        <div id="result1" class="text-center"></div>        
+        </form>
+      </div> 
+    </div>
+    <div class="row">
+     <div class="col-md-12">
+        
+          <ul class="social_icon">
+               <li><a href="#" class="facebook"><i class="icon-facebook5"></i></a></li>
+               <li><a href="#" class="twitter"><i class="icon-twitter4"></i></a></li>
+               <li><a href="#" class="google"><i class="icon-google"></i></a></li>
+              </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<a href="#" id="back-top"><i class="fa fa-angle-up fa-2x"></i></a>
+
+<script src="js/jquery-2.2.3.js" type="text/javascript"></script>
+<script src="js/bootstrap.min.js" type="text/javascript"></script>
+<script src="js/jquery.parallax-1.1.3.js"></script>
+<script src="js/jquery.appear.js"></script>  
+<script src="js/jquery-countTo.js"></script> 
+<script src="js/owl.carousel.min.js" type="text/javascript"></script>
+<script src="js/jquery.fancybox.js"></script>
+<script src="js/jquery.mixitup.min.js"></script>
+<script src="js/functions.js" type="text/javascript"></script>
+
+</body>
+</html>

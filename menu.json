@@ -1,0 +1,31 @@
+[
+    {
+      "name": "Samosa",
+      "price": 30.0
+    },
+    {
+      "name": "Pizza",
+      "price": 99.0
+    },
+    {
+      "name": "Cheese Sandwich",
+      "price": 60.0
+    },
+    {
+      "name": "Paneer Sandwich",
+      "price": 80.0
+    },
+    {
+      "name": "Baked Potato Jackets",
+      "price": 99.0
+    },
+    {
+      "name": "Mexican Taco",
+      "price": 899.0
+    },
+    {
+      "name": "Tex-Mex Chicken",
+      "price": 1250.0
+    }
+  ]
+  
